@@ -1,4 +1,3 @@
-import static java.lang.StringUTF16.indexOf;
 
 public class Main {
 
@@ -18,43 +17,43 @@ public class Main {
         }
 
         for (int i =0; i<len; i++){
-
-            if (str.substring(i,i+2).equals("(")){
+            if (str.charAt(i)=='('){
                 countopen++;
             }
-            else if (str.substring(i,i+2).equals(")")) {
+            else if (str.charAt(i)==')') {
                 countclose++;
             }
         }
 
+        if(countclose!=countopen){
+            return false;
+        }
+
         for(int a = 0; a<len; a++){
-            if(str.substring(a,a+2).equals("(")){
+            if(str.charAt(a)=='('){
                 countopen--;
-                if(str.substring(a+2).contains(")")){
+                if(str.substring(a+1).contains(")")){
                     countclose--;
                 }
 
             }
         }
 
-        if(countclose!= countopen){
-            return false;
-        }
-        else if(countclose == countopen){
+        if(countclose==countopen){
             return true;
         }
-
         return false;
 
     }
 
 
     // 2. reverseInteger
-    public static String reverseInteger(String str){
+    public static String reverseInteger(int num){
+        String str = Integer.toString(num);
         int len = str.length();
         String output = "";
-        for (int i =len-1; i>0; i--){
-            output+=i;
+        for (int i =len-1; i>=0; i--){
+            output+=str.charAt(i);
         }
         return output;
 
@@ -65,19 +64,27 @@ public class Main {
     // 3. encryptThis
     public static String encryptThis(String str){
         int len = str.length();
-        char letter = str.charAt(0);
-        int code = (int)letter;
-        String codel = String.valueOf(code);
+        String[] words = str.split(" ");
+        String output ="";
 
-        String output = codel;
-        String last = str.substring(len-1);
-        String first = str.substring(1,2);
-        String mid = str.substring(2,len-1);
+        for(int i =0;i< words.length; i++){
+            String string = "";
+            String word = words[i];
+            string += word;
+            char letter = string.charAt(0);
+            int code = (int)letter;
+            output+=code;
+            String two = string.substring(1,2);
+            String last = string.substring(string.length()-1);
+            String mid = string.substring(2,string.length()-1);
+            output+=last;
+            output+=mid;
+            output+=two;
+            output+= " ";
 
-        output += codel;
-        output += last;
-        output += mid;
-        output += first;
+
+        }
+
         return output;
 
     }
@@ -85,32 +92,48 @@ public class Main {
 
     // 4. decipherThis
     public static String decipherThis(String str){
-        int count = 0;
-        int len = str.length();
+        String[] words = str.split(" ");
         String output = "";
 
-        for (int i = 0; i<len; i++){
-            if (Character.isDigit(str.charAt(i))){
-                count++;
+        for(int i =0;i< words.length; i++){
+            String string = "";
+            String word = words[i];
+            string += word;
+
+            int count = 0;
+            for (int a = 0; a<string.length(); a++){
+                if (Character.isDigit(string.charAt(a))){
+                    count++;
+                }
+                else{
+                    break;
+                }
+            }
+
+            int code = Integer.valueOf(string.substring(0,count));
+            char letter = (char) code;
+            output+= letter;
+
+            char two = string.charAt(count);
+            char last = string.charAt(string.length()-1);
+            String mid;
+            if(string.length()<=5){
+                mid = "";
+            }
+            else{
+                mid = string.substring(count+1,string.length()-1);
+            }
+            output+=last;
+            output+=mid;
+            output+=two;
+
+            if (i == words.length) {
+                output+="";
+            } else {
+                output+=" ";
             }
         }
 
-        String numm = str.substring(0,count+1);
-        int num = Integer.parseInt(numm);
-        char letter = (char)num;
-        output+= letter;
-        String nsecond = str.substring(len-1);
-        output+= nsecond;
-
-        if(num>=10){
-            String mid = str.substring(3,len-2);
-            String nlast = str.substring(2,3);
-        }
-        String mid = str.substring(2,len-2);
-        String nlast = str.substring(1,2);
-
-        output+= mid;
-        output+= nlast;
 
         return output;
 
